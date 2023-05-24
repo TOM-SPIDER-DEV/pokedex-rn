@@ -4,12 +4,27 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
 import FavoriteScreen from "../screens/Favorite";
-import PokedexScreen from "../screens/Pokedex";
+import PokedexNavigation from "./PokemonNavigation";
 import Account from "../screens/Account";
 
 const Tab = createBottomTabNavigator();
 
-const screensOptions = {
+interface ScreensOptions {
+  [key: string]: {
+    headerTitle?: string;
+    tabBarLabel?: string;
+    tabBarIcon?: ({
+      color,
+      size,
+    }: {
+      color: string;
+      size: number;
+    }) => JSX.Element;
+    headerShown?: boolean;
+  };
+}
+
+const screensOptions: ScreensOptions = {
   Favorite: {
     headerTitle: "Favorites",
     tabBarIcon: ({ color, size }) => (
@@ -18,6 +33,7 @@ const screensOptions = {
   },
   Pokedex: {
     tabBarLabel: "",
+    headerShown: false,
     tabBarIcon: () => RenderPokeball(),
   },
 
@@ -37,8 +53,8 @@ export default function Navigation() {
         options={screensOptions.Favorite}
       />
       <Tab.Screen
-        name="Pokedex"
-        component={PokedexScreen}
+        name="PokeScreen"
+        component={PokedexNavigation}
         options={screensOptions.Pokedex}
       />
       <Tab.Screen
