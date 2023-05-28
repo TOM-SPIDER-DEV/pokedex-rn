@@ -1,3 +1,4 @@
+import React from "react";
 import {
   StyleSheet,
   View,
@@ -5,14 +6,27 @@ import {
   Image,
   TouchableWithoutFeedback,
 } from "react-native";
-import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
 import { PokemonCustom } from "../types";
 import getColorByPokemonType from "../utils/getColorByComponentType";
+
+type RootStackParamList = {
+  Pokemon: { id: number } | undefined;
+};
+
 export default function PokemonCard({ pokemon }: { pokemon: PokemonCustom }) {
   const backgroundColor = getColorByPokemonType(pokemon.type);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const formattedPokemonId = pokemon.id.toString().padStart(3, "0");
+
+  const goToPokemon = () => {
+    navigation.navigate("Pokemon", { id: pokemon.id });
+  };
+
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={goToPokemon}>
       <View style={[styles.container, { backgroundColor }]}>
         <View style={styles.imageContainer}>
           <Image source={{ uri: pokemon.image }} style={styles.image} />
@@ -25,6 +39,7 @@ export default function PokemonCard({ pokemon }: { pokemon: PokemonCustom }) {
     </TouchableWithoutFeedback>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     position: "relative",

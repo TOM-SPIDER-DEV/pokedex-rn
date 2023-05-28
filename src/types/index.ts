@@ -8,9 +8,17 @@ export interface PokemonCustom {
 }
 
 export interface PokemonBasicInfo {
+  count: number;
+  next: string;
+  previous: null;
+  results: Result[];
+}
+
+interface Result {
   name: string;
   url: string;
 }
+
 export interface PokemonFullDetails {
   abilities: Ability[];
   base_experience: number;
@@ -171,13 +179,13 @@ interface Other {
   "official-artwork": OfficialArtwork;
 }
 
-interface Stat {
+export interface Stat {
   base_stat: number;
   effort: number;
   stat: Species;
 }
 
-interface Type {
+export interface Type {
   slot: number;
   type: Species;
 }
