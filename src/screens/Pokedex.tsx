@@ -32,9 +32,5 @@ export default function Pokedex() {
     getPokemonData();
   }, []);
 
-  return (
-    <SafeAreaView>
-      <PokemonList pokemons={pokemons} loadMorePokemons={getPokemonData} />
-    </SafeAreaView>
-  );
+  return <PokemonList pokemons={pokemons} loadMorePokemons={getPokemonData} />;
 }

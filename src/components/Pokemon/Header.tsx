@@ -9,7 +9,7 @@ export default function Header({ pokemon }: { pokemon: PokemonFullDetails }) {
 
   const formattedPokemonId = pokemon?.id.toString().padStart(3, "0");
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor }]}>
+    <View style={[styles.container, { backgroundColor }]}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Text style={styles.pokemonName}>{pokemon?.name}</Text>
@@ -24,7 +24,7 @@ export default function Header({ pokemon }: { pokemon: PokemonFullDetails }) {
           />
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 

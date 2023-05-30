@@ -4,7 +4,7 @@ import React from "react";
 import { Type } from "../../types";
 import getColorByPokemonType from "../../utils/getColorByComponentType";
 
-export default function Type({ types }: { types: Type[] }) {
+export default function TypeComponent({ types }: { types: Type[] }) {
   return (
     <View style={styles.container}>
       {types.map((type) => (

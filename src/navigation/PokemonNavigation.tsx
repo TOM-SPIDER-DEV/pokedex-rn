@@ -12,7 +12,9 @@ const screensOptions = {
   },
   Pokemon: {
     title: "",
-    headerShown: true,
+    headerTransparent: true,
+    headerTintColor: "#fff",
+    shadowColor: "black",
   },
 };
 

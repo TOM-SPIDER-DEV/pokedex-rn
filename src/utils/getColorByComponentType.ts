@@ -1,6 +1,8 @@
 import { POKEMON_TYPE_COLORS } from "./constants";
 
-const getColorByPokemonType = (type: string) =>
-  POKEMON_TYPE_COLORS[type.toLowerCase()];
-
-export default getColorByPokemonType;
+export default function getColorByComponentType(type: string) {
+  if (POKEMON_TYPE_COLORS[type.toLowerCase()]) {
+    return POKEMON_TYPE_COLORS[type.toLowerCase()];
+  }
+  return POKEMON_TYPE_COLORS["default"];
+}
