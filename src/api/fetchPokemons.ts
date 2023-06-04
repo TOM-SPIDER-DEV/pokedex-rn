@@ -22,7 +22,9 @@ export async function getDetailPokemon(
   }
 }
 
-export async function getPokemonById(id: string): Promise<PokemonFullDetails> {
+export async function getPokemonById(
+  id: string | number
+): Promise<PokemonFullDetails> {
   try {
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`);
     const data = await res.json();

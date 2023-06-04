@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import { user, userDetails } from "../../utils/userDB";
+import useAuth from "../../hooks/useAuth";
 
 type initialValues = {
   username: string;
@@ -17,6 +18,7 @@ const initialValues: initialValues = {
 
 export default function LoginForm() {
   const [error, setError] = useState("");
+  const { login } = useAuth();
 
   const formik = useFormik({
     initialValues,
@@ -25,14 +27,12 @@ export default function LoginForm() {
       if (user.username !== username && user.password !== password) {
         setError("Invalid username or password");
       } else {
-        //
+        login(userDetails);
       }
     },
     validateOnChange: false,
     validationSchema: Yup.object({
-      username: Yup.string()
-        .email("Invalid username address")
-        .required("Username is required"),
+      username: Yup.string().required("Username is required"),
       password: Yup.string()
         .min(6, "Password must be at least 6 characters")
         .required("Password is required"),

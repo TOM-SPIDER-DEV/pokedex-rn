@@ -1,15 +1,21 @@
-import { SafeAreaView } from "react-native";
-import React, { useState, useEffect } from "react";
-import { getPokemons, getDetailPokemon } from "../api/fetchPokemons";
-import PokemonList from "../components/PokemonList";
-import { PokemonCustom, PokemonBasicInfo } from "../types";
+import React, { useEffect, useState } from "react";
+
+import PokemonList from "../components/Pokedex/PokemonList";
+
+import { PokemonBasicInfo, PokemonCustom } from "../types";
+import { getDetailPokemon, getPokemons } from "../api/fetchPokemons";
 
 export default function Pokedex() {
   const [pokemons, setPokemons] = useState<PokemonCustom[]>([]);
   const [nextUrl, setNextUrl] = useState<string>();
+  const [isNext, setIsNext] = useState<boolean>(false);
 
-  const getPokemonData = async () => {
-    if (nextUrl === null) return;
+  const fetchPokemons = async () => {
+    if (nextUrl === null) {
+      setIsNext(false);
+      return;
+    }
+    setIsNext(true);
     const pokemonArray: PokemonCustom[] = [];
     const pokemons: PokemonBasicInfo = await getPokemons(nextUrl);
     setNextUrl(pokemons.next);
@@ -29,8 +35,14 @@ export default function Pokedex() {
   };
 
   useEffect(() => {
-    getPokemonData();
+    fetchPokemons();
   }, []);
 
-  return <PokemonList pokemons={pokemons} loadMorePokemons={getPokemonData} />;
+  return (
+    <PokemonList
+      pokemons={pokemons}
+      loadMorePokemons={fetchPokemons}
+      isNext={isNext}
+    />
+  );
 }

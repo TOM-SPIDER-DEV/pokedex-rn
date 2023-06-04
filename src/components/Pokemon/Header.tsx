@@ -31,8 +31,8 @@ export default function Header({ pokemon }: { pokemon: PokemonFullDetails }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
     paddingBottom: 20,
     marginBottom: 20,
   },

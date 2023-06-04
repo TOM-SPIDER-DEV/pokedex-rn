@@ -1,13 +1,16 @@
 import { ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
+
 import { useNavigation } from "@react-navigation/native";
 
 import { getPokemonById } from "../api/fetchPokemons";
 import { PokemonFullDetails } from "../types";
 
+import HeaderNavigation from "../components/Pokemon/HeaderNavigation";
 import Header from "../components/Pokemon/Header";
 import Type from "../components/Pokemon/Type";
 import Stats from "../components/Pokemon/Stats";
+import useAuth from "../hooks/useAuth";
 
 interface Props {
   route: any;
@@ -30,8 +33,10 @@ export default function Pokemon({ route }: Props) {
   }, []);
 
   if (!pokemon) return null;
+
   return (
     <ScrollView>
+      <HeaderNavigation id={pokemon.id} type={pokemon.types[0].type.name} />
       <Header pokemon={pokemon} />
       <Type types={pokemon.types} />
       <Stats stats={pokemon.stats} />

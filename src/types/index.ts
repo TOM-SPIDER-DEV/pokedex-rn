@@ -19,6 +19,8 @@ interface Result {
   url: string;
 }
 
+/* ***************** */
+
 export interface PokemonFullDetails {
   abilities: Ability[];
   base_experience: number;
@@ -188,4 +190,18 @@ export interface Stat {
 export interface Type {
   slot: number;
   type: Species;
+}
+
+/* ***************** */
+
+export interface User {
+  username: string;
+  password: string;
+}
+
+export interface UserDetail {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
 }

@@ -8,14 +8,16 @@ import {
 import React from "react";
 
 import PokemonCard from "./PokemonCard";
-import { PokemonCustom } from "../types";
+import { PokemonCustom } from "../../types";
 
 export default function PokemonList({
   pokemons,
   loadMorePokemons,
+  isNext,
 }: {
   pokemons: PokemonCustom[];
-  loadMorePokemons: () => void;
+  loadMorePokemons?: () => void;
+  isNext: boolean;
 }) {
   return (
     <FlatList
@@ -25,12 +27,11 @@ export default function PokemonList({
       keyExtractor={(pokemon) => pokemon.id.toString()}
       renderItem={({ item }) => <PokemonCard pokemon={item} />}
       contentContainerStyle={styles.flatListContainer}
-      onEndReached={loadMorePokemons}
+      onEndReached={() => isNext && loadMorePokemons && loadMorePokemons()}
       onEndReachedThreshold={0.5}
       ListFooterComponent={
         <ActivityIndicator size="large" style={styles.spinner} />
       }
-      ListEmptyComponent={<Text>No hay pokemons</Text>}
     />
   );
 }

@@ -9,8 +9,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { PokemonCustom } from "../types";
-import getColorByPokemonType from "../utils/getColorByComponentType";
+import { PokemonCustom } from "../../types";
+import getColorByPokemonType from "../../utils/getColorByComponentType";
 
 type RootStackParamList = {
   Pokemon: { id: number } | undefined;

@@ -1,11 +1,13 @@
-export const user = {
-  username: "xagustin93",
+import { User, UserDetail } from "../types/index";
+
+export const user: User = {
+  username: "bot123",
   password: "123456",
 };
 
-export const userDetails = {
-  username: "xagustin93",
-  firstName: "Agustin",
-  lastName: "Navarro Galdon",
-  email: "xAgustin93@gmail.com",
+export const userDetails: UserDetail = {
+  username: "bot123",
+  firstName: "Tomas",
+  lastName: "Santa Cruz",
+  email: "bot123@gmail.com",
 };
