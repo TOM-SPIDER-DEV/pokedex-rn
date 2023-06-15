@@ -1,10 +1,24 @@
-import { View, Text } from "react-native";
-import React from "react";
-import LoginForm from "../components/Auth/LoginForm";
+import React, { useCallback, useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { app } from "../../firebase-config";
 import UserData from "../components/Auth/UserData";
-import useAuth from "../hooks/useAuth";
+import LoginForm from "../components/Auth/LoginForm";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Account() {
-  const { user } = useAuth();
-  return <View>{user ? <UserData /> : <LoginForm />}</View>;
+  const [isUser, setIsUser] = useState<boolean>(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      const auth = getAuth(app);
+
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setIsUser(user ? true : false);
+      });
+
+      return () => unsubscribe();
+    }, [])
+  );
+
+  return isUser ? <UserData /> : <LoginForm />;
 }

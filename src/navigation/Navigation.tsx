@@ -1,5 +1,5 @@
 import React from "react";
-import { Image } from "react-native";
+import { Image, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
@@ -27,7 +27,6 @@ interface ScreensOptions {
 const screensOptions: ScreensOptions = {
   Favorite: {
     headerTitle: "Favorites Pokemons",
-
     tabBarIcon: ({ color, size }) => (
       <Icon name="heart" color={color} size={size} />
     ),
@@ -47,7 +46,7 @@ const screensOptions: ScreensOptions = {
 
 export default function Navigation() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName="PokeScreen">
       <Tab.Screen
         name="Favorite"
         component={FavoriteNavigation}

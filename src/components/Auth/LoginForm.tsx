@@ -1,69 +1,131 @@
-import { View, Text, StyleSheet, TextInput, Button } from "react-native";
+import {
+  ScrollView,
+  Text,
+  StyleSheet,
+  TextInput,
+  Alert,
+  Pressable,
+} from "react-native";
+
 import React, { useState } from "react";
+
+import { getAuth, signInWithEmailAndPassword, User } from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "../../../firebase-config";
+
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
-import { user, userDetails } from "../../utils/userDB";
-import useAuth from "../../hooks/useAuth";
+import SignupForm from "./SigninForm";
 
 type initialValues = {
-  username: string;
-  password: string;
+  emailInput: string;
+  passwordInput: string;
 };
 
 const initialValues: initialValues = {
-  username: "",
-  password: "",
+  emailInput: "",
+  passwordInput: "",
 };
 
+interface State {
+  user: User | null;
+  email: string;
+  password: string;
+  hasAlreadySignedIn: boolean;
+}
+
 export default function LoginForm() {
-  const [error, setError] = useState("");
-  const { login } = useAuth();
+  const [state, setState] = useState<State>({
+    user: null,
+    email: "",
+    password: "",
+    hasAlreadySignedIn: false,
+  });
+
+  const app = initializeApp(firebaseConfig);
+
+  const auth = getAuth(app);
+
+  const handleSignIn = () => {
+    signInWithEmailAndPassword(auth, state.email, state.password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        setState({ ...state, user });
+      })
+      .catch((error) => {
+        console.error(error);
+        Alert.alert(error.message);
+      });
+  };
 
   const formik = useFormik({
     initialValues,
-    onSubmit: ({ username, password }) => {
-      setError("");
-      if (user.username !== username && user.password !== password) {
-        setError("Invalid username or password");
-      } else {
-        login(userDetails);
-      }
+    onSubmit: () => {
+      handleSignIn();
     },
     validateOnChange: false,
     validationSchema: Yup.object({
-      username: Yup.string().required("Username is required"),
+      email: Yup.string()
+        .email("Invalid email address")
+        .required("Email is required"),
+
       password: Yup.string()
         .min(6, "Password must be at least 6 characters")
         .required("Password is required"),
     }),
   });
 
-  return (
-    <View>
+  return !state.hasAlreadySignedIn ? (
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ alignItems: "center" }}
+    >
       <Text style={styles.title}>Log in</Text>
       <TextInput
-        placeholder="username"
+        placeholder="email"
         style={styles.input}
         autoCapitalize="none"
-        value={formik.values.username}
-        onChangeText={(text) => formik.setFieldValue("username", text)}
+        value={state.email}
+        onChangeText={(email) => {
+          setState({ ...state, email });
+          formik.setFieldValue("email", email);
+        }}
       />
-      <Text style={styles.error}>{formik.errors.username}</Text>
+      <Text style={styles.error}>{formik.errors.emailInput}</Text>
       <TextInput
         placeholder="Password"
         style={styles.input}
         secureTextEntry={true}
-        value={formik.values.password}
-        onChangeText={(text) => formik.setFieldValue("password", text)}
+        value={state.password}
+        onChangeText={(password) => {
+          setState({ ...state, password });
+          formik.setFieldValue("password", password);
+        }}
       />
-      <Text style={styles.error}>{formik.errors.password}</Text>
-      <Button title="Log in" onPress={formik.handleSubmit} />
-      <Text style={styles.error}>{error}</Text>
-    </View>
+      <Text style={styles.error}>{formik.errors.passwordInput}</Text>
+      <Pressable onPress={handleSignIn} style={styles.button}>
+        <Text>Log in</Text>
+      </Pressable>
+      <Pressable
+        style={styles.button}
+        onPress={() => setState({ ...state, hasAlreadySignedIn: true })}
+      >
+        <Text>Sign up</Text>
+      </Pressable>
+    </ScrollView>
+  ) : (
+    <SignupForm
+      login={() => {
+        setState({ ...state, hasAlreadySignedIn: false });
+      }}
+    />
   );
 }
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
   title: {
     textAlign: "center",
     fontSize: 28,
@@ -73,9 +135,18 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    margin: 12,
-    borderWidth: 1,
+    marginTop: 4,
+    width: 300,
+    backgroundColor: "#DDDDDD",
     padding: 10,
+    borderRadius: 10,
+  },
+  button: {
+    alignItems: "center",
+    width: 300,
+    backgroundColor: "#A9CBD9",
+    padding: 10,
+    margin: 10,
     borderRadius: 10,
   },
   error: {

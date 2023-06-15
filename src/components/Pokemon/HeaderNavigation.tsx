@@ -1,7 +1,7 @@
 import { SafeAreaView, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import React, { useState, useEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState, useEffect, useCallback } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import {
   addPokemonToFavorite,
@@ -9,7 +9,9 @@ import {
   removePokemonFromFavorite,
 } from "../../api/favoritesPokemons";
 import getColorByComponentType from "../../utils/getColorByComponentType";
-import useAuth from "../../hooks/useAuth";
+
+import { getAuth } from "firebase/auth";
+import { set } from "firebase/database";
 
 interface Props {
   id: number;
@@ -18,33 +20,26 @@ interface Props {
 
 export default function HeaderNavigation({ id, type }: Props) {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
-  const { user } = useAuth();
+  const user = getAuth().currentUser;
   const navigation = useNavigation();
 
   const backgroundColor = getColorByComponentType(type);
 
   useEffect(() => {
-    const getFavorite = async () => {
-      const favorite = await isFavoritePokemon(id);
+    isFavoritePokemon(id).then((favorite) => {
       setIsFavorite(favorite);
-    };
-    (async () => {
-      await getFavorite();
-    })();
+    });
   }, [id]);
 
-  useEffect(() => {
-    const handleFavorite = async () => {
-      if (!isFavorite) {
-        await removePokemonFromFavorite(id);
-      } else {
-        await addPokemonToFavorite(id);
-      }
-    };
-    (async () => {
-      await handleFavorite();
-    })();
-  }, [isFavorite]);
+  const toggleFavorite = async () => {
+    if (isFavorite) {
+      await removePokemonFromFavorite(id);
+      setIsFavorite(false);
+    } else {
+      await addPokemonToFavorite(id);
+      setIsFavorite(true);
+    }
+  };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor }]}>
@@ -63,9 +58,7 @@ export default function HeaderNavigation({ id, type }: Props) {
           color="white"
           style={styles.icon}
           solid={isFavorite}
-          onPress={() => {
-            setIsFavorite(!isFavorite);
-          }}
+          onPress={toggleFavorite}
         />
       )}
     </SafeAreaView>

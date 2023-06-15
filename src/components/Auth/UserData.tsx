@@ -1,10 +1,18 @@
-import { View, Text, StyleSheet, Button } from "react-native";
+import {
+  View,
+  ScrollView,
+  Text,
+  StyleSheet,
+  Button,
+  Pressable,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import useAuth from "../../hooks/useAuth";
+
 import { getFavoritePokemon } from "../../api/favoritesPokemons";
+import { getAuth, signOut } from "firebase/auth";
 
 export default function UserData() {
-  const { user, logout } = useAuth();
+  const user = getAuth().currentUser;
   const [favoritePokemons, setFavoritePokemons] = useState([]);
 
   useEffect(() => {
@@ -13,28 +21,30 @@ export default function UserData() {
     });
   }, []);
 
+  const logout = () => {
+    signOut(getAuth());
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
-        Bienvenido, {user?.firstName} {user?.lastName}
-      </Text>
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>Bienvenido, {user?.displayName}</Text>
       <View>
-        <Text style={styles.text}>
-          Name: {user?.firstName} {user?.lastName}
-        </Text>
-        <Text style={styles.text}>Username: {user?.username}</Text>
+        <Text style={styles.text}>Username: {user?.displayName}</Text>
         <Text style={styles.text}>Email: {user?.email}</Text>
         <Text style={styles.text}>
           Favorite Pokemons: {favoritePokemons.length}
         </Text>
       </View>
-      <Button title="Logout" onPress={logout} />
-    </View>
+      <Pressable onPress={logout} style={styles.button}>
+        <Text>Logout</Text>
+      </Pressable>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
   container: {
     margin: 20,
+    flex: 1,
   },
   title: {
     fontSize: 24,
@@ -49,11 +59,11 @@ const styles = StyleSheet.create({
     borderColor: "#CFCFCF",
   },
   button: {
-    margin: "auto",
-    width: 100,
-    height: 50,
-    backgroundColor: "#FF0000",
+    alignItems: "center",
+    width: 300,
+    backgroundColor: "#A9CBD9",
+    padding: 10,
+    margin: 10,
     borderRadius: 10,
-    justifyContent: "center",
   },
 });

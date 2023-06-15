@@ -19,18 +19,26 @@ export default function PokemonList({
   loadMorePokemons?: () => void;
   isNext: boolean;
 }) {
+  const pokemonKey = (pokemon: PokemonCustom) => pokemon.id.toString();
+
   return (
     <FlatList
       data={pokemons}
       numColumns={2}
       showsVerticalScrollIndicator={false}
-      keyExtractor={(pokemon) => pokemon.id.toString()}
+      keyExtractor={pokemonKey}
       renderItem={({ item }) => <PokemonCard pokemon={item} />}
       contentContainerStyle={styles.flatListContainer}
       onEndReached={() => isNext && loadMorePokemons && loadMorePokemons()}
       onEndReachedThreshold={0.5}
-      ListFooterComponent={
-        <ActivityIndicator size="large" style={styles.spinner} />
+      ListFooterComponent={() =>
+        isNext ? (
+          <ActivityIndicator
+            style={styles.spinner}
+            size="large"
+            color="#0000ff"
+          />
+        ) : null
       }
     />
   );

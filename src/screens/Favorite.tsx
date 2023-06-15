@@ -2,16 +2,15 @@ import { SafeAreaView, Text, StyleSheet } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useState } from "react";
 
-import useAuth from "../hooks/useAuth";
-
 import PokemonList from "../components/Pokedex/PokemonList";
 
 import { PokemonCustom } from "../types";
 import { getFavoritePokemon } from "../api/favoritesPokemons";
 import { getPokemonById } from "../api/fetchPokemons";
+import { getAuth } from "firebase/auth";
 
 export default function Favorite() {
-  const { user } = useAuth();
+  const user = getAuth().currentUser;
   const [pokemons, setPokemons] = useState<PokemonCustom[]>([]);
 
   const fetchFavoritePokemons = async () => {
@@ -31,7 +30,7 @@ export default function Favorite() {
     }
 
     setPokemons(pokemonsArray);
-    console.log(pokemonsId);
+    pokemonsId;
   };
 
   useFocusEffect(

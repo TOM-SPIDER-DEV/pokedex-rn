@@ -10,7 +10,6 @@ import HeaderNavigation from "../components/Pokemon/HeaderNavigation";
 import Header from "../components/Pokemon/Header";
 import Type from "../components/Pokemon/Type";
 import Stats from "../components/Pokemon/Stats";
-import useAuth from "../hooks/useAuth";
 
 interface Props {
   route: any;
