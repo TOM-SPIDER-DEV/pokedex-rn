@@ -2,6 +2,9 @@
 
 This is a Pokédex application built with React Native that utilizes Firebase for storing favorite pokémons and implementing email/password authentication.
 
+<img src="./assets/pokedex (home).PNG"  width=200/>
+<img src="./assets/pokedex (pokemon screen).PNG" width=200/>
+
 ## Features
 
 - View a list of pokémons with their details such as name, type, and abilities.
